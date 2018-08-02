@@ -1,6 +1,6 @@
 import gym
 import tensorflow as tf
-import numby as np
+import numpy as np
 
 
 
@@ -21,18 +21,18 @@ discount_rate = 0.95
 class Agent:
     def __init__(self, num_actions, state_size):
 
-        initializer = tf.contrib.layers.xaiver_initializer()
-        self.input_layer = tf.placeholder(dtype=tf.float32, shape=[none, state_size])
+        initializer = tf.contrib.layers.xavier_initializer()
+        self.input_layer = tf.placeholder(dtype=tf.float32, shape=[None, state_size])
 
         hidden_layer = tf.layers.dense(self.input_layer, 8, activation=tf.nn.relu, kernel_initializer=initializer)
         hidden_layer_2 = tf.layers.dense(hidden_layer, 8, activation=tf.nn.relu, kernel_initializer=initializer)
         out = tf.layers.dense(hidden_layer_2, num_actions, activation=None)
-        self.outputs = tf.softmax(out)
+        self.outputs = tf.nn.softmax(out)
         self.choice = tf.argmax(self.outputs, axis=1)
-        self.rewards = tf.placeholder(shape=[None, ], dtype=float32)
-        self.actions = tf.placeholder(shape=[None, ], dtype=float32)
+        self.rewards = tf.placeholder(shape=[None, ], dtype=tf.float32)
+        self.actions = tf.placeholder(shape=[None, ], dtype=tf.float32)
         one_hot_actions = tf.one_hot(self.actions, num_actions)
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=out, labels=some_hot_actions)
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=out, labels=one_hot_actions)
         self.loss = tf.reduce_mean(cross_entropy * self.rewards)
         self.gradients = tf.gradients(self.loss, tf.trainable_variables())
         self.gradients_to_apply = []
@@ -58,7 +58,7 @@ agent = Agent( num_actions, state_size)
 
 init = tf.global_variables_initializer()
 
-saver = tf.train.Saver=(max_to_keep=2)
+saver = tf.train.Saver(max_to_keep = 2)
 
 if not os.path.exists(path):
     os.makedirs(path)
